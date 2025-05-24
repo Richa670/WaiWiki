@@ -1,59 +1,119 @@
-import React, { useState } from 'react';
-import { Box, Button, Container, Typography, Link, Paper, Grid } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box,
+  Button,
+  Typography, 
+  Link,
+  Paper,
+  Alert,
+  CircularProgress
+ } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import OtpInput from './OtpInput';
-import { NavLink } from 'react-router-dom';
+import {  NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { verifyOtp, sendOtp } from '../authService'; //  API service
+
 
 const OtpVerification = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { email } = location.state || {};
   const [otp, setOtp] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [resendDisabled, setResendDisabled] = useState(true);
+  const [countdown, setCountdown] = useState(30);
 
-  const handleChange = (otpValue:string) => {
-    setOtp(otpValue);
+
+  
+  const handleChange = (value: string) => {
+    setOtp(value);
+    setError('');
   };
 
+
+   // Handle OTP verification
+  const handleVerify = async (e) => {
+    e.preventDefault();
+    console.log('Reset requested for:', otp); 
+
+    if (!otp || otp.length !== 4) {
+      setError('Please enter a valid 4-digit OTP');
+      navigate('/set-pass'); 
+      return;
+    }
+  }
+
+  // Handle OTP resend
+  const handleResend = async () => {
+    try {
+      await sendOtp(email);
+      setCountdown(30);
+      setResendDisabled(true);
+    } catch (err) {
+      setError('Failed to resend OTP. Please try again.');
+    }
+  };
+
+  // Countdown timer for resend OTP
+  useEffect(() => {
+    if (countdown > 0 && resendDisabled) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    } else {
+      setResendDisabled(false);
+    }
+  }, [countdown, resendDisabled]);
+ 
+
   return (
-    <Grid container sx={{ height: '100vh' }}>
-      <Grid item xs={12} md={6}>
-        <Container maxWidth="sm" sx={{ py: 8 }}>
-          <Typography variant="h4" sx={{ mb: 4, fontWeight: 700 }}>
-            <span style={{ color: '#404471' }}>[[]]Wai</span>
-            <span style={{ color: '#8BD0BD' }}>Wiki</span>
+  <Box sx={{ maxWidth: 400, mx: "auto", p: 3 }}>
+          <Typography variant="h4" sx={{ mb: 4, fontWeight: "bold" }}>
+            <Box component="span" color="#2A2A48">[[]]Wai</Box>
+            <Box component="span" color="#7ECFB3">Wiki</Box>
           </Typography>
           
-          <Paper elevation={0}>
+          <Paper elevation={0} component="form" onSubmit={handleVerify} >
             <Typography variant="h5" sx={{ mb: 1, fontWeight: 600 }}>OTP Verification</Typography>
-            <Typography color="text.secondary" sx={{ mb: 4 }}>We sent a code to <strong>example@example.com</strong></Typography>
+            <Typography color="text.secondary" sx={{ mb: 4 }}>We sent a code to <strong>example@example.com</strong>
+            </Typography>
+            {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
-            <Box sx={{ mb: 4 }}>
-              <input
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                maxLength={4}
-                style={{ width: '100%', padding: 12, fontSize: 18, textAlign: 'center', border: '1px solid #ccc', borderRadius: 4 }}
-              />
-            </Box>
 
             <Box sx={{ mb: 4 }}>
               <OtpInput length={4} onChange={handleChange} />
             </Box>
 
-
+            <Box sx={{ mt: 2, textAlign: 'center' }}>
             <Typography color="text.secondary" sx={{ mb: 3 }}>
               Didn't receive the email?{' '}
-              <Link href="#" onClick={(e) => e.preventDefault()} sx={{ color: 'primary.main', fontWeight: 500 }}>
-                Click to Resend
+              <Link href="#" 
+              onClick={(e) => {
+                e.preventDefault();
+                handleResend();
+              }} 
+              sx={{ color: 'primary.main', fontWeight: 500, cursor: resendDisabled ? 'not-allowed' : 'pointer' }}>
+                 {resendDisabled ? `Click to Resend (${countdown}s)` : 'Click to Resend'}
               </Link>
             </Typography>
 
-            <Button fullWidth variant="contained" size="large" sx={{ mb: 3, bgcolor: '#1A237E', '&:hover': { bgcolor: '#0D1359' } }}>
-              Continue
-            </Button>
+            <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            disabled={loading}
+            sx={{ mt: 2 }}
+        
+      >
+            {loading ? <CircularProgress size={24} /> : 'Continue'}
+          </Button>
+
+            </Box>
 
             <Button
-        component={NavLink}
-          to="/forgot-password"
-          startIcon={<ArrowBackIcon />}
-          sx={{
+           component={NavLink}
+           to="/forgot-password"
+           startIcon={<ArrowBackIcon />}
+           sx={{
             mt: 2,
             textTransform: 'none',
             color: 'black',
@@ -62,16 +122,15 @@ const OtpVerification = () => {
           Back to log in
         </Button>
           </Paper>
-        </Container>
-      </Grid>
-      
-      <Grid item md={6} sx={{ 
-          display: { xs: 'none', md: 'block' },
-          backgroundColor: '#8BD0BD'
-        }} />
-     
-    </Grid>
+
+             {/* Footer */}
+            <Typography variant="caption" align="center" mt={40}>
+             © 2025, Eimple Labs. All Rights Reserved.
+                   </Typography>
+        </Box>
+  
   );
 };
+
 
 export default OtpVerification;

@@ -1,28 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Box,
   Typography,
   TextField,
   Button,
   Container,
-  Link,
+  InputAdornment,
+  IconButton,
   CssBaseline
 } from '@mui/material';
-import { ArrowBack } from '@mui/icons-material';
+// import { ArrowBack } from '@mui/icons-material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { LockReset as ResetIcon } from '@mui/icons-material';
 import { NavLink } from 'react-router-dom';
+import { LockReset as ResetIcon } from '@mui/icons-material';
+import { Mail } from "@mui/icons-material";
+import { useNavigate } from 'react-router-dom';
+import { sendOtp } from '../authService'; //  API service
 
+// const sendOtp = async (email) => {
+//   console.log(`OTP sent to ${email}`);
+//   return new Promise(resolve => setTimeout(resolve, 1000));
+// };
 
 const ForgotPasswordPage = () => {
     const [email, setEmail] = React.useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
   
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
       e.preventDefault();
       // Handle password reset logic here
       console.log('Reset requested for:', email);
+   
+
+      try {
+        setLoading(true);
+        // Call API to send OTP
+        await sendOtp(email);
+        
+        // Navigate to OTP page with email
+        navigate('/otp', { 
+          state: { email }
+        });
+      } catch (err) {
+        setError('Failed to send OTP. Please try again.');
+      } finally {
+        setLoading(false);
+      }
     };
-  
   return (
     
       <>
@@ -88,7 +114,17 @@ const ForgotPasswordPage = () => {
                   autoFocus
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                />
+                  InputProps={{
+                   endAdornment: (
+                                <InputAdornment position="end">
+                                  <IconButton edge="end" aria-label="email icon">
+                                    <Mail color="primary" />
+                                  </IconButton>
+                                </InputAdornment>
+                              ),
+                            }}
+                           
+                            />
 
 
 
@@ -114,6 +150,7 @@ const ForgotPasswordPage = () => {
                   >
                     Send 
                   </Button>
+              
 
 
 
@@ -130,11 +167,21 @@ const ForgotPasswordPage = () => {
         >
           Back to log in
         </Button>
-    </Box>
-    </Box>
-    </Box>
+
+        {/* Footer */}
+        <Typography variant="caption" align="center" mt={40}>
+           © 2025, Eimple Labs. All Rights Reserved.
+          </Typography>
+            
+          </Box>
+          </Box>
+          </Box> 
     </Container>
     </>
+            
+            
+
+    
   );
 };
 

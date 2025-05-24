@@ -1,41 +1,36 @@
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import OtpVerification from './Otpverify';
+import React from 'react';
+import { Box, Typography } from '@mui/material';
+import OtpIndex from './OtpIndex';
 
-// Create a theme instance.
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#1A237E',
-    },
-    secondary: {
-      main: '#8BD0BD',
-    },
-  },
-  typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-    button: {
-      textTransform: 'none',
-    },
-  },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: 4,
-        },
-      },
-    },
-  },
-});
 
-const OTP = () => {
+const Otp = () => {
+  // Choose which page to show (either welcome or signin)
+  const showOtpIndex = true;
+
+  if (showOtpIndex) {
+    return < OtpIndex/>;
+  }
+
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <OtpVerification />
-    </ThemeProvider>
+    <Box 
+      sx={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'grey.100',
+        p: 3 // Add some padding
+      }}
+    >
+      <Box sx={{ textAlign: 'center', maxWidth: 600 }}>
+        <Typography variant="h3" fontWeight="bold" mb={2}>
+          Welcome to Your Blank App
+        </Typography>
+        <Typography variant="h5" color="text.secondary">
+          Start building your amazing project here!
+        </Typography>
+      </Box>
+    </Box>
   );
 };
-
-export default OTP;
+export default Otp;

@@ -10,9 +10,8 @@ import {
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 // import PlannerLogo from '../../Universal/Logo';
-
 
 
 const SetPassword = () => {
@@ -20,10 +19,25 @@ const SetPassword = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const navigate = useNavigate(); 
+
 
   const toggleVisibility = (type) => {
     if (type === 'password') setShowPassword(!showPassword);
     else setShowConfirm(!showConfirm);
+  };
+
+
+
+  const handleSubmit = () => {
+    // You can add validation here before navigating
+    if (password === confirmPassword && password.length >= 8) {
+      navigate('/'); // Navigate to your next page route
+    } else if (password || confirmPassword) {
+        alert('Please fill in both password fields');
+      }else {
+      alert('Passwords do not match or are too short');
+    }
   };
 
   return (
@@ -101,6 +115,7 @@ const SetPassword = () => {
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2, py: 1.5 }}
+          onClick={handleSubmit}
         >
           Let’s Start Our Journey
         </Button>
@@ -108,7 +123,7 @@ const SetPassword = () => {
         {/* Back to Login */}
         <Button
         component={NavLink}
-          to="/otp"
+          to="/signup"
           startIcon={<ArrowBackIcon />}
           sx={{
             mt: 2,

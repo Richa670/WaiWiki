@@ -1,48 +1,45 @@
-import { createTheme } from '@mui/material/styles';
+import React from "react";
+import { Box, Typography } from "@mui/material";
+import ForgotPasswordPage from "./Forgotpass";
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#283B67', // waiwiki navy
-      contrastText: '#FFFFFF',
-    },
-    secondary: {
-      main: '#8FD9BB', // waiwiki mint
-      contrastText: '#000000',
-    },
-    background: {
-      default: '#F7F8F9', // waiwiki gray
-      paper: '#FFFFFF',
-    },
-    text: {
-      primary: '#000000',
-      secondary: '#283B67',
-    },
-    sidebar: {
-      main: '#FFFFFF',
-      contrastText: '#283B67',
-    },
-  },
-  shape: {
-    borderRadius: 8, // Default border radius
-  },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: 8,
-          textTransform: 'none',
-        },
-      },
-    },
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          borderRadius: 12,
-        },
-      },
-    },
-  },
-});
+const Forgotpage = () => {
+  return (
+    <Box sx={{ 
+      display: "flex", 
+      minHeight: "100vh",
+      flexDirection: { xs: "column", lg: "row" }
+    }}>
+      {/* Left side - Form */}
+      <Box sx={{
+        width: { xs: "100%", lg: "50%" },
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        p: 4,
+        backgroundColor: 'background.paper' // Better for theme consistency
+      }}>
+        <Box sx={{ 
+          maxWidth: "md", 
+          width: "100%",
+          maxWidth: 500
+        }}>
+          <ForgotPasswordPage />
+        </Box>
+      </Box>
 
-export default theme;
+     
+
+      {/* Right side - Background */}
+      <Box sx={{
+        display: { xs: "none", lg: "block" },
+        width: "50%",
+        bgcolor: "#7ECFB3",
+        position: 'relative' // For potential overlay content
+      }} />
+    </Box>
+
+    
+  );
+};
+
+export default Forgotpage;

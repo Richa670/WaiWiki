@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Link } from '@mui/material';
 import { 
   TextField, 
@@ -19,6 +19,7 @@ const SigninForm = () => {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate(); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,6 +33,7 @@ const SigninForm = () => {
       setIsLoading(true);
       // Handle login logic here
       // await authService.login(email, password, rememberMe);
+        navigate('/course');
     } catch (error) {
       console.error("Login failed:", error);
       alert("Login failed. Please try again.");
@@ -131,9 +133,17 @@ const SigninForm = () => {
           disabled={isLoading}
           startIcon={isLoading ? <CircularProgress size={20} /> : null}
         >
+          <Link component={RouterLink} to="/course"></Link>
           {isLoading ? "Signing in..." : "Login now"}
         </Button>
       </form>
+
+        {/* Footer */}
+      <Typography variant="caption" align="center" mt={40}>
+      © 2025, Eimple Labs. All Rights Reserved.
+     </Typography>
+
+
     </Box>
   );
 };

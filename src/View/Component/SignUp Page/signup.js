@@ -1,11 +1,20 @@
 import React from "react";
-import { Box, Button, Checkbox, FormControlLabel, TextField, Typography, InputAdornment, IconButton }
+import { Box, Button, TextField, Typography, InputAdornment, IconButton }
  from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
-import PlannerLogo from "../../Universal/Logo";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { NavLink,useNavigate } from 'react-router-dom';
+// import PlannerLogo from "../../Universal/Logo";
 
 
 const SignUp = () => {
+    const navigate = useNavigate(); // Hook to navigate
+
+    const handleLoginClick = () => {
+      // You can add validation here
+      navigate('/setpass'); 
+    };
+
     return (
         <Box
             display="flex"
@@ -28,11 +37,11 @@ const SignUp = () => {
                     alignItems="center"
                     gap={1.5}
                 >
-                    <PlannerLogo />
+                    {/* <PlannerLogo /> */}
 
                     <Typography variant="h4" fontWeight="bold">
-                        <span style={{ color: "#333" }}>WAI</span>
-                        <span style={{ color: "#a3c13b" }}>WIKI</span>
+                       <Box component="span" color="#2A2A48">[[]]Wai</Box>
+                       <Box component="span" color="#7ECFB3">Wiki</Box>
                     </Typography>
                 </Box>
 
@@ -41,7 +50,7 @@ const SignUp = () => {
                     Sign Up
                 </Typography>
                 <Typography variant="body2" color="textSecondary" mb={3}>
-                    Stap into succes
+                    Step into succes
                 </Typography>
 
                 {/* Email field */}
@@ -63,25 +72,37 @@ const SignUp = () => {
 
                 {/* Login Button */}
                 <Button
-                    variant="contained"
+                    type="submit"
                     fullWidth
-                    sx={{
-                        backgroundColor: "#2d3523",
-                        '&:hover': { backgroundColor: "#1f2518" },
-                        py: 1.5
-                    }}
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2, py: 1.5 }}
+                   onClick={handleLoginClick}
                 >
                     Login now
                 </Button>
 
+                 {/* Back Link */}
+                      <Button
+                        component={NavLink}
+                          to="/set-pass"
+                          startIcon={<ArrowBackIcon />}
+                          sx={{
+                            mt: 2,
+                            textTransform: 'none',
+                            color: 'black',
+                          }}
+                        >
+                          Back to log in
+                        </Button>
+
                 {/* Footer */}
                 <Typography variant="caption" align="center" mt={40}>
-                    © 2025, Jankoti. All Rights Reserved.
+                    © 2025, Eimple. All Rights Reserved.
                 </Typography>
             </Box>
 
             {/* Right section */}
-            <Box flexGrow={1} bgcolor="#eff0e4" />
+            <Box flexGrow={1} bgcolor="#7ECFB3" />
         </Box>
     );
 }

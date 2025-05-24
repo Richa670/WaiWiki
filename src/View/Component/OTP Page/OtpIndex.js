@@ -1,9 +1,8 @@
 import React from "react";
-import { Box } from "@mui/material";
-import Logo from "./Logo";
-import SigninForm from "./signinform";
+import { Box, Typography } from "@mui/material";
+import OtpVerification from "./Otpverify";
 
-const SigninPage = () => {
+const OtpIndex = () => {
   return (
     <Box sx={{ 
       display: "flex", 
@@ -17,31 +16,27 @@ const SigninPage = () => {
         alignItems: "center",
         justifyContent: "center",
         p: 4,
-        backgroundColor: 'background.paper' // Better for theme consistency
+        backgroundColor: 'background.paper'
       }}>
         <Box sx={{ 
-          maxWidth: "md", 
           width: "100%",
           maxWidth: 500
         }}>
-          <Logo />
-          <SigninForm />
+          <OtpVerification />  
         </Box>
-      </Box>
 
      
+      </Box>
 
       {/* Right side - Background */}
       <Box sx={{
         display: { xs: "none", lg: "block" },
         width: "50%",
         bgcolor: "#7ECFB3",
-        position: 'relative' // For potential overlay content
+        position: 'relative'
       }} />
     </Box>
-
-    
   );
 };
 
-export default SigninPage;
+export default OtpIndex;
